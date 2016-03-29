@@ -9,12 +9,28 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.osmdroid.api.IMapController;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapView;
+
 public class MainActivity extends AppCompatActivity {
+    private MapView mMapView;
+    private IMapController mIMapController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Phong - show the map + add 2 zoom button + zoom at a default view point
+        mMapView = (MapView) findViewById(R.id.map); // map
+        mMapView.setTileSource(TileSourceFactory.MAPNIK);
+        mMapView.setMultiTouchControls(true);
+        mIMapController = mMapView.getController(); // map controller
+        mIMapController.setZoom(10);
+        GeoPoint startPoint = new GeoPoint(10.772241, 106.657676);
+        mIMapController.setCenter(startPoint);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
