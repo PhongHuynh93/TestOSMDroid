@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private IMapController mIMapController;
     private GoogleApiClient mGoogleApiClient;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,12 +44,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Phong - show the map + add 2 zoom button + zoom at a default view point
         mMapView = (MapView) findViewById(R.id.map); // map
-        mMapView.setTileSource(TileSourceFactory.MAPNIK);
-        mMapView.setMultiTouchControls(true);
-        mIMapController = mMapView.getController(); // map controller
-        mIMapController.setZoom(10);
-        GeoPoint startPoint = new GeoPoint(10.772241, 106.657676);
-        mIMapController.setCenter(startPoint);
+        if (mMapView != null) {
+            mMapView.setTileSource(TileSourceFactory.MAPNIK);
+            mMapView.setMultiTouchControls(true);
+            mIMapController = mMapView.getController(); // map controller
+            mIMapController.setZoom(10);
+            GeoPoint startPoint = new GeoPoint(10.772241, 106.657676);
+            mIMapController.setCenter(startPoint);
+        }
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -163,11 +167,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.i(TAG, "Connection suspended");
+        mGoogleApiClient.connect();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Phong
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 }
