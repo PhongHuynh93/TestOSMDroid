@@ -44,12 +44,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Phong - show the map + add 2 zoom button + zoom at a default view point
         mMapView = (MapView) findViewById(R.id.map); // map
-        mMapView.setTileSource(TileSourceFactory.MAPNIK);
-        mMapView.setMultiTouchControls(true);
-        mIMapController = mMapView.getController(); // map controller
-        mIMapController.setZoom(10);
-        GeoPoint startPoint = new GeoPoint(10.772241, 106.657676);
-        mIMapController.setCenter(startPoint);
+        if (mMapView != null) {
+            mMapView.setTileSource(TileSourceFactory.MAPNIK);
+            mMapView.setMultiTouchControls(true);
+            mIMapController = mMapView.getController(); // map controller
+            mIMapController.setZoom(10);
+            GeoPoint startPoint = new GeoPoint(10.772241, 106.657676);
+            mIMapController.setCenter(startPoint);
+        }
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
